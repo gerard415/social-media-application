@@ -1,4 +1,5 @@
 const User = require('../models/User')
+const { BadRequestError, UnauthenticatedError } = require('../errors')
 
 const register = async (req, res) => {
      //creating the user. before the model saves the user, it hashes the passes first in the User schema.
@@ -10,7 +11,26 @@ const register = async (req, res) => {
 }
 
 const login = async (req, res) => {
-    res.send('login')
+    const {email, password} = req.body
+    if(!email || !password){
+        throw new BadRequestError('Please provide both email and password')
+    }
+
+    //finding the user with the particular email
+    const user = await User.findOne({email})
+    if(!user){
+        throw new UnauthenticatedError('Invalid credentials')
+    }
+
+    //comparing passwords
+    const isPasswordCorrect = await user.comparePassword(password)
+    if(!isPasswordCorrect){
+        throw new UnauthenticatedError('Invalid credentials')
+    }
+
+    //creating the token
+    const token = user.createJWT()
+    res.status(200).json({name: user.firstName, token})
 }
 
 module.exports = {register, login}
