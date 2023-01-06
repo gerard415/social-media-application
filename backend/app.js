@@ -10,6 +10,8 @@ const path = require('path')
 const express = require('express');
 const app = express();
 
+const authenticateUser = require('./middleware/authentication')
+
 /* CONFIGURATIONS */
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
@@ -20,6 +22,7 @@ app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
 //routers
 const authRouter = require('./routes/auth')
+const userRouter = require('./routes/user')
 
 
 // error handlers
@@ -32,6 +35,7 @@ app.use(cors());
 
 //routes
 app.use('/api/v1/auth', authRouter)
+app.use('/api/v1/user', authenticateUser, userRouter)
 
 
 //errors
