@@ -23,6 +23,7 @@ app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 //routers
 const authRouter = require('./routes/auth')
 const userRouter = require('./routes/user')
+const postsRouter = require('./routes/posts')
 
 
 // error handlers
@@ -36,6 +37,7 @@ app.use(cors());
 //routes
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/user', authenticateUser, userRouter)
+app.use('/api/v1/posts', authenticateUser, postsRouter)
 
 
 //errors
