@@ -4,7 +4,6 @@ require('express-async-errors');
 const cors = require('cors')
 const helmet = require('helmet')  //helps you secure your Express apps by setting various HTTP headers.
 const morgan = require('morgan')
-const path = require('path')
 
 
 const express = require('express');
@@ -17,7 +16,6 @@ app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(morgan("common"));
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
-app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
 
 //routers

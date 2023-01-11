@@ -1,21 +1,43 @@
+const User = require('../models/User')
+const Post = require('../models/Post')
 
-const getFeedPosts = (req, res) => {
+const getFeedPosts = async (req, res) => {
     res.send('get feed posts')   
 }
 
-const getUserPosts = (req, res) => {
+const getUserPosts = async (req, res) => {
     res.send('get user posts')
 }
 
-const createPost = (req, res) => {
-    res.send('create post')
+const createPost = async (req, res) => {
+    req.body.createdBy = req.user.userId
+    const {userId} = req.user
+    console.log(req.file)
+
+    const user = await User.findOne({_id: userId})
+
+    const newPost = new Post({
+        ...req.body,
+        image: req.file.originalname,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        location: user.location,
+        userPicturePath: user.picturePath,
+
+        likes: {},
+        comments: [], 
+    })
+    await newPost.save()
+
+    const posts = await Post.find({})
+    res.status(200).json({posts})
 }
 
-const likePost = (req, res) => {
+const likePost = async (req, res) => {
     res.send('like post')
 }
 
-const deletePost = (req, res) => {
+const deletePost = async (req, res) => {
     res.send('delete post')
 }
 
