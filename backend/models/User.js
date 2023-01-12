@@ -29,9 +29,8 @@ const UserSchema = new mongoose.Schema({
         required: [true, 'please provide a password'],
         minlength: 8
     },
-    picturePath: {
+    image: {
         type: String,
-        default: "",
     },
     friends: {
         type: Array,
